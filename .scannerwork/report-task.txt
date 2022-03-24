@@ -1,0 +1,6 @@
+projectKey=io.web-demo:sonarqube-scanner-flask-webapp
+serverUrl=http://localhost:9000
+serverVersion=8.9.7.52159
+dashboardUrl=http://localhost:9000/dashboard?id=io.web-demo%3Asonarqube-scanner-flask-webapp
+ceTaskId=AX-4otGgW-RFnydAoMPy
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AX-4otGgW-RFnydAoMPy
