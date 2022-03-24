@@ -6,42 +6,44 @@ pipeline {
     }
 
     stages {
-        stage('SonarQube') {
+        stage('Git') {
             steps {
-                withSonarQubeEnv(credentialsId: 'sonarqube-auth-token', envOnly: true) {
-                // This expands the evironment variables SONAR_CONFIG_NAME, SONAR_HOST_URL, SONAR_AUTH_TOKEN that can be used by any script.
-                println "${env.SONAR_HOST_URL}" 
+                git branch: 'main', credentialsId: 'github-jenkins-key', url: 'git@github.com:RomanGoryainov/simple-flask-app.git'
+            }
+        }
+        stage('SonarQube Code Analysis') {           
+            steps {
+                script {
+                    scannerHome = tool 'sonar-scanner';
+                }
+                    withSonarQubeEnv('sonaqube-local') {                
+                        bat "${scannerHome}/bin/sonar-scanner.bat"
+                    }
+            }
+        }
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonabe-webhook-token'
                 }
             }
         }
-        // stage('SonarQube Code Analysis') {
-        //     def scannerHome = tool 'sonar-scanner';
-        //     steps {
-        //         withSonarQubeEnv('sonaqube-local', credentialsId: 'sonarqube-auth-token') {
-        //             bat 'sonar-scanner'
-        //         }
-        //     }
-        // }
-        // stage("Quality Gate") {
-        //     steps {
-        //         timeout(time: 5, unit: 'MINUTES') {
-        //             // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-        //             // true = set pipeline to UNSTABLE, false = don't
-        //             waitForQualityGate abortPipeline: false
-        //         }
-        //     }
-        // }
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Building..'
+                script {
+                 docker.build("test:${env.BUILD_ID}", '--label io.demo.app=simple-flask-app .')
+                } 
+                bat 'docker image ls -f "label=io.demo.app=simple-flask-app"'
             }
         }
-        stage('Test') {
+        stage('Test Application') {
             steps {
                 echo 'Testing..'
             }
         }
-        stage('Deploy') {
+        stage('Deploy to K8s') {
             steps {
                 echo 'Deploying....'
             }
