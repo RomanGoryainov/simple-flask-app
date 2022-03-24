@@ -6,11 +6,11 @@ pipeline {
     }
 
     stages {
-        stage('Git') {
-            steps {
-                git branch: 'main', credentialsId: 'github-jenkins-key', url: 'git@github.com:RomanGoryainov/simple-flask-app.git'
-            }
-        }
+        // stage('Git') {
+        //     steps {
+        //         git branch: 'main', credentialsId: 'github-jenkins-key', url: 'git@github.com:RomanGoryainov/simple-flask-app.git'
+        //     }
+        // }
         stage('SonarQube Code Analysis') {           
             steps {
                 script {
