@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_REGISTRY_NAME = 'artifactory-demo.io:8082'
+        DOCKER_REPO_NAME = 'docker-local'
+        APP_NAME = 'simple-flask-app'
+    }
     options {
         disableConcurrentBuilds()
         timestamps()
@@ -33,14 +38,20 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                 docker.build("test:${env.BUILD_ID}", '--label io.demo.app=simple-flask-app .')
+                 docker.build("${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:${env.BUILD_ID}", "--label io.demo.app=${env.APP_NAME} .")
                 } 
-                bat 'docker image ls -f "label=io.demo.app=simple-flask-app"'
+                println "Checking if the new image is in place.."
+                bat "docker image ls -f label=io.demo.app=${env.APP_NAME}"
             }
         }
         stage('Test Application') {
             steps {
                 echo 'Testing..'
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                echo 'Pushing..'
             }
         }
         stage('Deploy to K8s') {
