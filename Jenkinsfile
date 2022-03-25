@@ -54,7 +54,7 @@ pipeline {
                 println "Pushing image to jfrog registry.."
                 script {
                     docker.withRegistry("http://${env.DOCKER_REGISTRY_NAME}", "jfrog-container-registry-auth") {                        
-                        newImage.push()             
+                        newImage.push("latest")
                     }
                 }
             }
