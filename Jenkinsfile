@@ -38,7 +38,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:${env.BUILD_ID}", "--label io.demo.app=${env.APP_NAME} .")
+                    newImage = docker.build("${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}", "--label io.demo.app=${env.APP_NAME} .")
                 } 
                 println "Checking if the new image is in place.."
                 bat "docker image ls -f label=io.demo.app=${env.APP_NAME}"
@@ -54,7 +54,7 @@ pipeline {
                 println "Pushing image to jfrog registry.."
                 script {
                     docker.withRegistry("http://${env.DOCKER_REGISTRY_NAME}", "jfrog-container-registry-auth") {                        
-                        dockerImage.push("${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:${env.BUILD_ID}")                     
+                        newImage.push("v-${env.BUILD_ID}")             
                     }
                 }
             }
