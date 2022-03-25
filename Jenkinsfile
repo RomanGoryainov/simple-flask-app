@@ -51,7 +51,12 @@ pipeline {
         }
         stage('Push Docker Image') {
             steps {
-                echo 'Pushing..'
+                println "Pushing image to jfrog registry.."
+                script {
+                    withRegistry("${env.DOCKER_REGISTRY_NAME}", "jfrog-container-registry-auth") {
+                        image.push("${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:${env.BUILD_ID}")
+                    }
+                }
             }
         }
         stage('Deploy to K8s') {
