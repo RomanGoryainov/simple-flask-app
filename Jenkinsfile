@@ -54,8 +54,7 @@ pipeline {
                 println "Pushing image to jfrog registry.."
                 script {
                     docker.withRegistry("http://${env.DOCKER_REGISTRY_NAME}", "jfrog-container-registry-auth") {                        
-                        //docker.push("${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:${env.BUILD_ID}")
-                        docker.image('hello-world').pull
+                        dockerImage.push("${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:${env.BUILD_ID}")                     
                     }
                 }
             }
