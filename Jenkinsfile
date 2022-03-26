@@ -64,11 +64,9 @@ pipeline {
         }
         stage('Remove docker image from Jenkins') {
             steps {
-                echo 'Removing image..'
-                script {
-                   println newImage.id
-                }                
-                
+                echo 'Removing images..'              
+                bat "docker rmi ${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:latest --force"
+                bat "docker rmi ${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:v-${env.BUILD_ID} --force"
             }
         }
         stage('Deploy to K8s') {
