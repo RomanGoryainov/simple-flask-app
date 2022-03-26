@@ -72,7 +72,10 @@ pipeline {
         stage('Deploy to K8s') {
             steps {
                 // How to deploy new image? New deployment? How to add image from env?
-                echo 'Deploying....'
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubernetes-admin-at-kubernetes', namespace: '', serverUrl: '') {
+                   echo 'Deploying....'
+                   bat "kubectl get all -A"
+                }                
             }
         }
     }
