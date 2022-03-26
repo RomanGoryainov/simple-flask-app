@@ -19,6 +19,13 @@ def hello():
 class unprotected_form(FlaskForm):
     class Meta:
         csrf = True # Compliant
+
+@app.route("/healthcheck")
+def healthcheck():
+    return "OK"
+class unprotected_form(FlaskForm):
+    class Meta:
+        csrf = True # Compliant
         
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(debug = False, host="0.0.0.0", port=8080)
