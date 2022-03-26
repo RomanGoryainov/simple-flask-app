@@ -65,8 +65,10 @@ pipeline {
         stage('Remove docker image from Jenkins') {
             steps {
                 echo 'Removing image..'
-                // Test code using pytest package
-                bat 'FOR /F "tokens=*" %a IN (\'docker image ls -q -f "label=io.demo.app=simple-flask-app"\') DO docker rmi --force %a'
+                script {
+                   println newImage.id
+                }                
+                
             }
         }
         stage('Deploy to K8s') {
