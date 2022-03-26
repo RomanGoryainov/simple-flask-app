@@ -66,7 +66,7 @@ pipeline {
             steps {
                 echo 'Removing image..'
                 // Test code using pytest package
-                bat 'FOR /F "tokens=*" %a IN (\'docker image ls -q -f "label=io.demo.app=${env.APP_NAME}"\') DO docker rmi %a'
+                bat 'FOR /F "tokens=*" %a IN (\'docker image ls -q -f "label=io.demo.app=simple-flask-app"\') DO docker rmi --force %a'
             }
         }
         stage('Deploy to K8s') {
