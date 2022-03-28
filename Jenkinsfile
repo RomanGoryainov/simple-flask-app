@@ -31,17 +31,17 @@ pipeline {
                 timeout(time: 10, unit: 'MINUTES') {
                     // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
                     // true = set pipeline to UNSTABLE, false = don't
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonabe-webhook-token'
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube-webhook-token'
                 }
             }
         }
         stage('Build Docker Image') {
             steps {                
                 script {
-                    newImage = docker.build("${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:v-${env.BUILD_ID}", "--label io.demo-app.flask=${env.APP_NAME} .")
+                    newImage = docker.build("${env.DOCKER_REGISTRY_NAME}/${env.DOCKER_REPO_NAME}/${env.APP_NAME}:v-${env.BUILD_ID}", "--label io.demo-app=${env.APP_NAME} .")
                 }
                 println "Checking if the new image is in place.."                 
-                bat "docker image ls -f label=io.demo-app.flask=${env.APP_NAME}"
+                bat "docker image ls -f label=io.demo-app=${env.APP_NAME}"
             }
         }
         stage('Test Application') {
