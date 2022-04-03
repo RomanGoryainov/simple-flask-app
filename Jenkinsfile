@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_REGISTRY_NAME = 'artifactory.demo-app.io:8082'
+        DOCKER_REGISTRY_NAME = 'artifactory.demo-app.io'
         DOCKER_REPO_NAME = 'docker-local'
         APP_NAME = 'simple-flask-app'
     }
@@ -73,10 +73,10 @@ pipeline {
             steps {
                 echo 'Deploying..'
                 // How to deploy new image? New deployment? How to add image from env?
-                // withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubernetes-admin-at-kubernetes', namespace: '', serverUrl: '') {
-                //    echo 'Deploying....'
-                //    bat "kubectl get all -A"
-                // }                
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubernetes-admin-at-kubernetes', namespace: '', serverUrl: '') {
+                   echo 'Deploying....'
+                   bat "kubectl get all -A"
+                }                
             }
         }
     }
