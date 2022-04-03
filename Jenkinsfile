@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_REGISTRY_NAME = 'artifactory.demo-app.io'
+        DOCKER_REGISTRY_NAME = 'artifactory.demo-app.io:8082'
         DOCKER_REPO_NAME = 'docker-local'
         APP_NAME = 'simple-flask-app'
     }
