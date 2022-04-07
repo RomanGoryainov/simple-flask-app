@@ -48,7 +48,12 @@ pipeline {
             steps {
                 echo 'Testing..'
                 // Test code using pytest package 
-                //git branch: 'main', credentialsId: 'github-jenkins-key', url: 'git@github.com:RomanGoryainov/simple-flask-app-tests.git'
+                // git branch: 'main', credentialsId: 'github-jenkins-key', url: 'git@github.com:RomanGoryainov/simple-flask-app-tests.git'
+                // dir('simple-flask-app-tests') {
+                //         bat returnStatus: false, script: '''pytest --junit-xml=reports/result.xml
+                //                                     exit 0'''
+                //         junit skipPublishingChecks: true, testResults: 'reports/*.xml'
+                // }
             }
         }
         stage('Push Docker Image') {
